@@ -6,7 +6,11 @@ with shelve.open('Ci') as db:
     Accname=db['Accname']
     key_pair=db['key_pair']
 def deletion(loc): #deletes given position
+    print(key_pair)
+    print(cipher)
     changes=dict()
+    print(loc)
+    print(key_pair)
     del key_pair[loc]
     mask=cipher.pop(loc)
     print("The Deleted value is:",mask)

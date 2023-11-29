@@ -14,16 +14,3 @@ def decryptor(n,m): #code to decrypt
     for i in range(len(m)-2):
         q=(q^t[2+i])
     return(q)
-# name=input("The Name to Decipher:")
-# loc=Accname[name]
-# for de in range(loc,loc+6):
-#     temp,temp1=[r[x] for x in list(key_pair[de].keys())],[cipher[x] for x in list(key_pair[de].values())]
-#     nws=decryptor(temp,temp1)
-#     if cipher[loc]==nws:
-#         continue
-#     else:
-#         flag=1
-# if flag==0:
-#     print("Deducted")
-# else:            
-#     print("Not deducted")
