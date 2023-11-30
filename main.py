@@ -9,6 +9,13 @@ from Register import calculation2
 from Delete import deletion2
 from Update import updation
 from Creditcard import decryption2
+# USE THIS CODE TO CHECK THE VALUES IN DB 
+# with shelve.open('Ci',writeback=True) as db:
+#     r=db['random']
+#     cipher=db['cipher']
+#     Accname=db['Accname']
+#     key_pair=db['key_pair']
+# print(Accname)
 # creating app     
 app = FastAPI()
 # Enable CORS for all origins
@@ -46,18 +53,6 @@ def update(item:dict):
 #credit card router  
 @app.post("/user/creditcard")
 def creditcard(item:dict):
-    decryption2(item['name'],item['message'])
-        # name=item["name"]
-        # loc=Accname[name]
-        # for de in range(loc,loc+6):
-        #     temp,temp1=[r[x] for x in list(key_pair[de].keys())],[cipher[x] for x in list(key_pair[de].values())]
-        #     nws=decryptor(temp,temp1)
-        #     if cipher[loc]==nws:
-        #         continue
-        #     else:
-        #         flag=1
-        # if flag==0:
-        #     print("Deducted")
-        # else:            
-        #     print("Not deducted")         
+        return decryption2(item['name'],item['message'])
+             
 
