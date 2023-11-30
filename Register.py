@@ -1,6 +1,11 @@
 import random #generates random value
 import shelve
-def encryptop(Accname,x,y,n,pos): #encrypts based on index
+with shelve.open('Ci',writeback=True) as db:
+    r=db['random']
+    cipher=db['cipher']
+    Accname=db['Accname']
+    key_pair=db['key_pair']
+def encryptop(x,y,n,pos): #encrypts based on index
     dict={y[i]:x[i] for i in range(2)}
     a,b=[],[]
     for i in dict.keys():
@@ -21,16 +26,21 @@ def encryptop(Accname,x,y,n,pos): #encrypts based on index
     key_pair.update({pos:(dict)})
     print(cipher)
 def calculation(n,pos): #code to encrypt
-    with shelve.open('Ci') as db:
-        r=db['random']
-        cipher=db['cipher']
-        Accname=db['Accname']
-        key_pair=db['key_pair']
     x=random.sample(range(0,pos-1),2) 
     y=random.sample(range(0,len(r)-1),3) 
     encryptop(x,y,n,pos)       
-    with shelve.open('Ci') as db:
-        db['cipher']=cipher
-        db['Accname']=Accname
-        db['key_pair']=key_pair
-    db.close()
+def calculation2(name, values):
+    if len(Accname) == 0:
+        counter = 0
+    else:
+        counter = len(Accname)
+    Accname.update({name: 5 + (counter * 6)})
+    counter += 1
+    for i in values:
+        calculation(int(i), len(cipher))
+    with shelve.open('Ci', writeback=True) as db:
+        db['cipher'] = cipher
+        db['Accname'] = Accname
+        db['key_pair'] = key_pair
+    print(Accname)
+    # db.close()

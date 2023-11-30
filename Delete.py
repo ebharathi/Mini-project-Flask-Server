@@ -1,6 +1,6 @@
 import random #generates random value
 import shelve
-with shelve.open('Ci') as db:
+with shelve.open('Ci',writeback=True) as db:
     r=db['random']
     cipher=db['cipher']
     Accname=db['Accname']
@@ -31,11 +31,7 @@ def deletion(loc): #deletes given position
         key_pair[i-1]=key_pair.pop(i)
     for key,value in changes.items():
             calculation(value,key)     
-    print("The Updated Key-Pairs are:",key_pair)      
-    with shelve.open('Ci') as db:
-        db['cipher']=cipher
-        db['Accname']=Accname
-        db['key_pair']=key_pair                          
+    print("The Updated Key-Pairs are:",key_pair)                           
     return 0
 def encryptop(x,y,n,pos): #encrypts based on index
     dict={y[i]:x[i] for i in range(2)}
@@ -70,3 +66,24 @@ def decryptor(n,m): #code to decrypt
     for i in range(len(m)-2):
         q=(q^t[2+i])
     return(q)
+def deletion2(name):
+    with shelve.open('Ci',writeback=True) as db:
+        r=db['random']
+        cipher=db['cipher']
+        Accname=db['Accname']
+        key_pair=db['key_pair']
+    print(Accname)
+    loc = Accname[name]
+    print(loc)
+    for key, value in Accname.items():
+        if value > loc:
+            Accname[key] = value - 6
+    print(Accname)        
+    for pos in range(loc,loc+6):
+        deletion(loc)
+    del Accname[name]    
+    with shelve.open('Ci',writeback=True) as db:       
+        db['cipher'] = cipher
+        db['Accname'] = Accname
+        db['key_pair'] = key_pair
+                
