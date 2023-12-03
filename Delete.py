@@ -94,7 +94,7 @@ def deletion2(name):
         db['key_pair'] = key_pair
 
     print("AFTER DELETION:")
-    print(Accname)
-    print(key_pair)
-    print(cipher)
+    print("Accname-->",Accname)
+    print("cipher-->",cipher)
+    print("Key_Pair-->",key_pair)
 
