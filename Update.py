@@ -37,11 +37,14 @@ def updation(name,value,temp,temp1): #updates cipher with new random and key val
         cipher=db['cipher']
         Accname=db['Accname']
         key_pair=db['key_pair']
-    print(Accname)
+    # print(Accname)
+    print("KEY VALUE PAIR BEFORE UPDATION:")
+    # print(key_pair)
     pos=Accname[name]
     pos+=value
     y=temp
     x=temp1
+    print("Old key:",key_pair[pos])
     mask=cipher[pos]
     temp,temp1=[r[x] for x in list(key_pair[pos].keys())],[cipher[x] for x in list(key_pair[pos].values())]
     n=decryptor(temp,temp1,r,cipher,Accname,key_pair)
@@ -58,3 +61,5 @@ def updation(name,value,temp,temp1): #updates cipher with new random and key val
         db['cipher'] = cipher
         db['Accname'] = Accname
         db['key_pair'] = key_pair
+    print("KEY VALUE PAIR AFTER UPDATION:")
+    print(key_pair[pos])

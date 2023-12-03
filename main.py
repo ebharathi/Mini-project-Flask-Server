@@ -10,12 +10,19 @@ from Delete import deletion2
 from Update import updation
 from Creditcard import decryption2
 # USE THIS CODE TO CHECK THE VALUES IN DB 
-# with shelve.open('Ci',writeback=True) as db:
-#     r=db['random']
-#     cipher=db['cipher']
-#     Accname=db['Accname']
-#     key_pair=db['key_pair']
-# print(Accname)
+with shelve.open('Ci',writeback=True) as db:
+    r=db['random']
+    cipher=db['cipher']
+    Accname=db['Accname']
+    key_pair=db['key_pair']
+print("Random")
+print(r)
+print("cipher")
+print(cipher)
+print("Accname")
+print(Accname)
+print("Key pair")
+print(key_pair)
 # creating app     
 app = FastAPI()
 # Enable CORS for all origins
@@ -30,6 +37,32 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+# to fetch db 
+@app.get("/admin/db")
+def get_db():
+    with shelve.open('Ci') as db:
+        r=db['random']
+        cipher=db['cipher']
+        Accname=db['Accname']
+        key_pair=db['key_pair']
+    print("DB SENT[+]")
+    return {
+        "cipher":cipher,
+        "Accname":Accname,
+        "key_pair":key_pair
+    }
+# to update DB
+@app.post("/admin/db/update")
+def update_db(item:dict):
+       with shelve.open('Ci',writeback=True) as db:
+            db['cipher'] = item["cipher"]
+            db['Accname'] = item["Accname"]
+            db['key_pair'] = item["key_pair"]
+       print("DATABASE UPDATED[+]")
+       print("new cipher--->",item["cipher"])
+       print("new accname--->",item["Accname"])
+       print("new key_pair--->",item["key_pair"])
+       return {"error":"false"}
 # post router for register
 @app.post("/admin/register")
 def register(item:dict):

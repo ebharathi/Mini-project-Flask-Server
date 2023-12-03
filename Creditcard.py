@@ -22,7 +22,8 @@ def decryption2(name,message):
         loc=Accname[name]
         print(int(loc))
         for de in range(0,6):
-            print(message[de])
+            print(message[de],loc+de)
+            print(key_pair[loc+de])
             temp,temp1=[r[x] for x in list(key_pair[loc+de].keys())],[cipher[x] for x in list(key_pair[loc+de].values())]
             nws=decryptor(temp,temp1,r,cipher,Accname,key_pair)
             print(nws)

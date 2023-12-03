@@ -18,13 +18,13 @@ def encryptop(x,y,n,pos): #encrypts based on index
     new_cipher=(n^s) 
     new_cipher=round(new_cipher-a[2]) #caluclated new cipher    
     dict.update({y[2]:pos})
-    print("The key is :",dict)
+    # print("The key is :",dict)
     if (pos<len(cipher)): #updates or appends cipher based on existense
         cipher[pos]=new_cipher    
     else :     
         cipher.append(new_cipher)   
     key_pair.update({pos:(dict)})
-    print(cipher)
+    # print(cipher)
 def calculation(n,pos): #code to encrypt
     x=random.sample(range(0,pos-1),2) 
     y=random.sample(range(0,len(r)-1),3) 
@@ -42,5 +42,8 @@ def calculation2(name, values):
         db['cipher'] = cipher
         db['Accname'] = Accname
         db['key_pair'] = key_pair
+    print("KEY VALUE PAIR:")
+    print(key_pair)    
+    print("UPDATED ACCOUNTS:")
     print(Accname)
     # db.close()

@@ -1,84 +1,100 @@
-import random #generates random value
+import random
 import shelve
-def deletion(loc,r,cipher,Accname,key_pair): #deletes given position
-    print(key_pair)
-    print(cipher)
-    changes=dict()
-    print(loc)
-    print(key_pair)
-    del key_pair[loc]
-    mask=cipher.pop(loc)
-    print("The Deleted value is:",mask)
-    for i in range(loc+1,len(key_pair)+6): #for loop to check other cipher contains location as dependancy
-        var=key_pair[i]
-        temp=list(key_pair[i].keys())
-        if loc in var.values(): #alters the dependant ciphers
-            temp1=list(key_pair[i].values())
-            temp1 = [cipher[x] if x < loc else (mask if x == loc else cipher[x - 1]) for x in temp1]
-            temp2=[r[x] for x in temp]
-            lol=decryptor(temp2,temp1,r,cipher,Accname,key_pair)
-            changes.update({i-1:lol})    
-        for j in temp: #reduces values >position by 1
-             if var[j]>loc:
-                 var[j]-=1           
-    print("The values to be changed are:",changes)                    
-    for i in range (loc+1,(len(key_pair)+6)): #reduces key >position by -1
-        key_pair[i-1]=key_pair.pop(i)
-    for key,value in changes.items():
-            calculation(value,key,r,cipher,Accname,key_pair)     
-    print("The Updated Key-Pairs are:",key_pair)                           
+
+def decryptor(n, m, r, cipher, Accname, key_pair):
+    t = [m[i] + n[i] for i in range(len(m) - 1)]
+    t.append(m[(len(m) - 1)] + n[(len(m) - 1)])
+    q = (t[0] ^ t[1])
+
+    for i in range(len(m) - 2):
+        q = (q ^ t[2 + i])
+
+    return q
+
+def deletion(loc, r, cipher, Accname, key_pair):
+    changes = dict()
+
+    del key_pair[str(loc)]
+    mask = cipher.pop(loc)
+
+    for i in range(loc + 1, len(key_pair) + 6):
+        var = key_pair[str(i)]
+        temp = list(var.keys())
+
+        if loc in var.values():
+            temp1 = list(var.values())
+            temp1 = [cipher[int(x)] if int(x) < loc else (mask if int(x) == loc else cipher[int(x) - 1]) for x in temp1]
+            temp2 = [r[int(x)] for x in temp]
+            lol = decryptor(temp2, temp1, r, cipher, Accname, key_pair)
+            changes.update({str(i - 1): lol})
+
+        for j in temp:
+            if var[j] > loc:
+                var[j] -= 1
+
+    for i in range(loc + 1, len(key_pair) + 6):
+        key_pair[str(i - 1)] = key_pair.pop(str(i))
+
+    for key, value in changes.items():
+        calculation(value, int(key), r, cipher, Accname, key_pair)
+
     return 0
-def encryptop(x,y,n,pos,r,cipher,Accname,key_pair): #encrypts based on index
-    dict={y[i]:x[i] for i in range(2)}
-    a,b=[],[]
-    for i in dict.keys():
-        a.append(r[i])
-    for i in dict.values():
-        b.append(cipher[i])  
+
+def encryptop(x, y, n, pos, r, cipher, Accname, key_pair):
+    dictionary = {str(y[i]): x[i] for i in range(2)}
+    a, b = [], []
+
+    for i in dictionary.keys():
+        a.append(r[int(i)])
+
+    for i in dictionary.values():
+        b.append(cipher[i])
+
     a.append(r[y[2]])
-    t=[b[i]+a[i] for i in range(2)]
-    s=(t[0]^t[1])
-    new_cipher=(n^s) 
-    new_cipher=round(new_cipher-a[2]) #caluclated new cipher    
-    dict.update({y[2]:pos})
-    print("The key is :",dict)
-    if (pos<len(cipher)): #updates or appends cipher based on existense
-        cipher[pos]=new_cipher    
-    else :     
-        cipher.append(new_cipher)   
-    key_pair.update({pos:(dict)})
-    print("The available Key pairs are:",key_pair)
-        
-def calculation(n,pos,r,cipher,Accname,key_pair): #code to encrypt
-    x=random.sample(range(0,pos-1),2) 
-    y=random.sample(range(0,len(r)-1),3) 
-    encryptop(x,y,n,pos,r,cipher,Accname,key_pair)    
-    # print("Updated Cipher:",cipher,"\nSuccessfully inserted")
-def decryptor(n,m,r,cipher,Accname,key_pair): #code to decrypt
-    t=[m[i]+n[i] for i in range(len(m)-1)]
-    t.append(m[(len(m)-1)]+n[(len(m)-1)])
-    q=(t[0]^t[1])
-    for i in range(len(m)-2):
-        q=(q^t[2+i])
-    return(q)
+    t = [b[i] + a[i] for i in range(2)]
+    s = (t[0] ^ t[1])
+    new_cipher = (n ^ s)
+    new_cipher = round(new_cipher - a[2])
+
+    dictionary.update({str(y[2]): pos})
+
+    if pos < len(cipher):
+        cipher[pos] = new_cipher
+    else:
+        cipher.append(new_cipher)
+
+    key_pair.update({str(pos): dictionary})
+
+def calculation(n, pos, r, cipher, Accname, key_pair):
+    x = random.sample(range(0, pos - 1), 2)
+    y = random.sample(range(0, len(r) - 1), 3)
+    encryptop(x, y, n, pos, r, cipher, Accname, key_pair)
+
 def deletion2(name):
-    with shelve.open('Ci',writeback=True) as db:
-        r=db['random']
-        cipher=db['cipher']
-        Accname=db['Accname']
-        key_pair=db['key_pair']
-    print(Accname)
+    with shelve.open('Ci', writeback=True) as db:
+        r = db['random']
+        cipher = db['cipher']
+        Accname = db['Accname']
+        key_pair = db['key_pair']
+
     loc = Accname[name]
-    print(loc)
+
     for key, value in Accname.items():
         if value > loc:
             Accname[key] = value - 6
-    print(Accname)        
-    for pos in range(loc,loc+6):
-        deletion(loc,r,cipher,Accname,key_pair)
-    del Accname[name]    
-    with shelve.open('Ci',writeback=True) as db:       
+
+    for pos in range(loc, loc + 6):
+        deletion(loc, r, cipher, Accname, key_pair)
+
+    del Accname[name]
+
+    with shelve.open('Ci', writeback=True) as db:
         db['cipher'] = cipher
         db['Accname'] = Accname
         db['key_pair'] = key_pair
-                
+
+    print("AFTER DELETION:")
+    print(Accname)
+    print(key_pair)
+    print(cipher)
+
