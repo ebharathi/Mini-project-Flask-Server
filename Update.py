@@ -34,11 +34,11 @@ def calculation(n, pos, r, cipher, Accname, key_pair):
 
 def decryptor(n, m, r, cipher, Accname, key_pair):
     t = [m[i] + n[i] for i in range(len(m) - 1)]
-    t.append(m[(len(m) - 1)] + n[(len(m) - 1)])
-    q = (t[0] ^ t[1])
+    t.append(m[len(m) - 1] + n[len(n) - 1])
+    q = t[0] ^ t[1]
 
     for i in range(len(m) - 2):
-        q = (q ^ t[2 + i])
+        q = q ^ t[2 + i]
 
     return q
 
@@ -51,7 +51,7 @@ def updation(name, value, temp, temp1):
 
     print("KEY VALUE PAIR BEFORE UPDATION:")
     pos = Accname[name]
-    pos += value
+    pos = int(pos) + int(value)  # Convert to integers before addition
     y = temp
     x = temp1
 
