@@ -23,9 +23,11 @@ def decryption2(name,message):
         print(int(loc))
         for de in range(0,6):          
             if cipher[loc+de]==message[de]:
-                print("succeded")
+                print("Match: ",cipher[loc+de]," == ",message[de])
+                
                 continue
             else:
+                print("Mismatch: ",cipher[loc+de]," != ",message[de])
                 flag=1
         if flag==0:
             return {"error":"false"}

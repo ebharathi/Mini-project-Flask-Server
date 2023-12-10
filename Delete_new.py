@@ -2,7 +2,7 @@ import random
 import shelve
 
 def decryptor(n, m, r, cipher, Accname, key_pair):
-    t = [m[i] + n[i] for i in range(len(m))]
+    t = [m[i] + n[i] for i in range(len(m)-1)]
     t.append(m[(len(m) - 1)] + n[(len(m) - 1)])
     q = (t[0] ^ t[1])
 
@@ -16,7 +16,7 @@ def deletion(loc, r, cipher, Accname, key_pair):
     del key_pair[str(loc)]
     mask = cipher.pop(loc)
 
-    for i in range(loc + 1, len(key_pair) + 6):
+    for i in range(loc + 1, len(cipher)):
         var = key_pair[str(i)]
         temp = list(var.keys())
 
@@ -31,7 +31,7 @@ def deletion(loc, r, cipher, Accname, key_pair):
             if var[j] > loc:
                 var[j] -= 1
 
-    for i in range(loc + 1, len(key_pair) + 6):
+    for i in range(loc + 1, len(cipher)):
         key_pair[str(i - 1)] = key_pair.pop(str(i))
 
     for key, value in changes.items():

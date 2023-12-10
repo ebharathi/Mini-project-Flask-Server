@@ -15,14 +15,10 @@ with shelve.open('Ci',writeback=True) as db:
     cipher=db['cipher']
     Accname=db['Accname']
     key_pair=db['key_pair']
-print("Random")
-print(r)
-print("cipher")
-print(cipher)
-print("Accname")
-print(Accname)
-print("Key pair")
-print(key_pair)
+print("Random -> ",r)
+print("cipher ->",cipher)
+print("Accname->",Accname)
+print("Key pair->",key_pair)
 # creating app     
 app = FastAPI()
 # Enable CORS for all origins

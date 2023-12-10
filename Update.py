@@ -26,17 +26,13 @@ def encryptop(x, y, n, pos, r, cipher, Accname, key_pair):
 
     key_pair.update({str(pos): key_dict})
 
-def calculation(n, pos, r, cipher, Accname, key_pair):
-    x = random.sample(range(0, pos - 1), 2)
-    y = random.sample(range(0, len(r) - 1), 3)
-    encryptop(x, y, n, pos, r, cipher, Accname, key_pair)
-    print("Updated Cipher:", cipher, "\nSuccessfully inserted")
 
 def decryptor(n, m, r, cipher, Accname, key_pair):
-    t = [m[i] + n[i] for i in range(len(m) - 1)]
+    t = [m[i] + n[i] for i in range(len(m))]
+    print("t---->",t)
     t.append(m[len(m) - 1] + n[len(n) - 1])
     q = t[0] ^ t[1]
-
+    print("q----->",q)
     for i in range(len(m) - 2):
         q = q ^ t[2 + i]
 
@@ -48,7 +44,9 @@ def updation(name, value, temp, temp1):
         cipher = db['cipher']
         Accname = db['Accname']
         key_pair = db['key_pair']
-
+    print("Random-->",r)
+    print("Cipher--->",cipher)
+    print("ALL KEY-PAIRS-->",key_pair)
     print("KEY VALUE PAIR BEFORE UPDATION:")
     pos = Accname[name]
     pos = int(pos) + int(value)  # Convert to integers before addition
@@ -61,10 +59,12 @@ def updation(name, value, temp, temp1):
     temp_keys = list(key_pair[str(pos)].keys())
     temp_values = list(key_pair[str(pos)].values())
 
-    temp = [r[int(temp_keys[i])] for i in range(2)]
-    temp1 = [cipher[int(temp_values[i])] for i in range(2)]
+    temp = [r[int(temp_keys[i])] for i in range(3)]
+    temp1 = [cipher[int(temp_values[i])] for i in range(3)]
+    print(temp,temp1)
 
     n = decryptor(temp, temp1, r, cipher, Accname, key_pair)
+    print("crt value-->",n)
     encryptop(x, y, n, pos, r, cipher, Accname, key_pair)
 
     print("Updated cipher:", cipher[pos])
@@ -72,19 +72,23 @@ def updation(name, value, temp, temp1):
     for i in range(pos + 1, len(cipher)):
         keys_i = list(key_pair[str(i)].keys())
         values_i = list(key_pair[str(i)].values())
-
+        keys_i=[int(x) for x in keys_i]
+        values_i=[int(x) for x in values_i]
         if pos in values_i:
-            temp1 = [mask if int(values_i[i]) == pos else cipher[int(values_i[i])] for i in range(2)]
-            temp = [r[int(keys_i[i])] for i in range(2)]
+            temp1 = [mask if int(values_i[i]) == pos else cipher[int(values_i[i])] for i in range(3)]
+            temp = [r[int(keys_i[i])] for i in range(3)]
 
             ans = decryptor(temp, temp1, r, cipher, Accname, key_pair)
+            print(ans)
             encryptop(x, y, ans, i, r, cipher, Accname, key_pair)
 
     with shelve.open('Ci', writeback=True) as db:
         db['cipher'] = cipher
         db['Accname'] = Accname
         db['key_pair'] = key_pair
-
+    print("Random-->",r)
+    print("cipher--->",cipher)
+    print("UPDATED ALL KEY_PAIRS-->",key_pair)
     print("KEY VALUE PAIR AFTER UPDATION:")
     print(key_pair[str(pos)])
 
